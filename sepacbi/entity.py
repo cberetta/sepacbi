@@ -115,12 +115,14 @@ class IdHolder(AttributeCarrier):
             root.append(self.address.__tag__())
 
         # ID
-        idtag = etree.SubElement(root, 'Id')
-        if self.private:
-            id_container = 'PrvtId'
-        else:
-            id_container = 'OrgId'
-        orgid = etree.SubElement(idtag, id_container)
+        # Insert -Id- only if CF is available
+        if hasattr(self, 'cf'):
+            idtag = etree.SubElement(root, 'Id')
+            if self.private:
+                id_container = 'PrvtId'
+            else:
+                id_container = 'OrgId'
+            orgid = etree.SubElement(idtag, id_container)
 
         # CUC
         if as_initiator:
